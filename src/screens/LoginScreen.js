@@ -6,68 +6,71 @@ import Logo from '../components/Logo'
 import Header from '../components/Header'
 import Button from '../components/Button'
 import TextInput from '../components/TextInput'
-import BackButton from '../components/BackButton'
 import { theme } from '../core/theme'
-import { emailValidator } from '../helpers/emailValidator'
-import { passwordValidator } from '../helpers/passwordValidator'
+import { employeeValidator } from '../helpers/employeeValidator'
+import { nipValidator } from '../helpers/nipValidator'
+import { nameValidator } from '../helpers/nameValidator'
+
 
 export default function LoginScreen({ navigation }) {
-  const [email, setEmail] = useState({ value: '', error: '' })
-  const [password, setPassword] = useState({ value: '', error: '' })
+  const [name, setName] = useState({value:'', error: ''})
+  const [employee, setEmployee] = useState({ value: '', error: '' })
+  const [nip, setNip] = useState({ value: '', error: '' })
 
   const onLoginPressed = () => {
-    const emailError = emailValidator(email.value)
-    const passwordError = passwordValidator(password.value)
-    if (emailError || passwordError) {
-      setEmail({ ...email, error: emailError })
-      setPassword({ ...password, error: passwordError })
+    const nameError = nameValidator(name.value)
+    const employeeError = employeeValidator(employee.value)
+    const nipError = nipValidator(nip.value)
+    if (nameError || employeelError || nipError) {
+      setName({ ...name, error: nameError})
+      setEmployee({ ...employee, error: employeeError })
+      setNip({ ...nip, error: nipError })
       return
     }
     navigation.reset({
-      index: 0,
-      routes: [{ name: 'Dashboard' }],
+      routes: [{ name: 'CheckScreen' }],
     })
   }
 
   return (
     <Background>
-      <BackButton goBack={navigation.goBack} />
       <Logo />
-      <Header>Bienvenido de vuelta.</Header>
+      <Header>Bienvenido.</Header>
       <TextInput
-        label="ID"
+        label="Cuenta"
         returnKeyType="next"
-        value={email.value}
-        onChangeText={(text) => setEmail({ value: text, error: '' })}
-        error={!!email.error}
-        errorText={email.error}
+        value={name.value}
+        onChangeText={(text) => setName({ value: text, error: '' })}
+        error={!!name.error}
+        errorText={name.error}
         autoCapitalize="none"
-        autoCompleteType="email"
-        textContentType="emailAddress"
-        keyboardType="email-address"
+        autoCompleteType="name"
+      />
+      <TextInput
+        label="Empleado ID"
+        returnKeyType="next"
+        value={employee.value}
+        onChangeText={(text) => setEmployee({ value: text, error: '' })}
+        error={!!employee.error}
+        errorText={employee.error}
+        autoCapitalize="none"
+        autoCompleteType="id"
       />
       <TextInput
         label="NIP"
         returnKeyType="done"
-        value={password.value}
-        onChangeText={(text) => setPassword({ value: text, error: '' })}
-        error={!!password.error}
-        errorText={password.error}
+        value={nip.value}
+        onChangeText={(text) => setNip({ value: text, error: '' })}
+        error={!!nip.error}
+        errorText={nip.error}
         secureTextEntry
       />
-      <View style={styles.forgotPassword}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('ResetPasswordScreen')}
-        >
-          <Text style={styles.forgot}>Olvidé mi contraseña.</Text>
-        </TouchableOpacity>
-      </View>
       <Button mode="contained" onPress={onLoginPressed}>
         Iniciar
       </Button>
 
     </Background>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
